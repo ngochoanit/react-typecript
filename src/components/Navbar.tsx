@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  Chip,
   FormControl,
   MenuItem,
   Select,
@@ -9,9 +10,11 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import { Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import WellcomeMessage from './WellcomeMessage';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { ProgressContext } from 'src/contexts/ProgressContext';
+import { ThemeContext } from 'src/contexts/ThemeContext';
 const StyledBox = styled(Box)({
   textAlign: 'center',
 });
@@ -28,7 +31,9 @@ const Navbar = () => {
   // state
   const [position, setPosition] = useState<string>('full-stack-developer');
   const [time, setTime] = useState<Date>(() => new Date(Date.now()));
-
+  const { status, lastTime } = useContext(ProgressContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  //effect
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTime(new Date(Date.now()));
@@ -44,7 +49,7 @@ const Navbar = () => {
     }>,
   ) => setPosition(event.target.value as string);
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="static" color={theme}>
       <Toolbar>
         <Box
           display="flex"
@@ -56,6 +61,9 @@ const Navbar = () => {
           <Typography variant="h6">My Move</Typography>
           <StyledBox>
             <WellcomeMessage position={position}></WellcomeMessage>
+            <Chip
+              label={`Last time working on this project: ${lastTime} - Status: ${status}`}
+            />
             <Box mt={1}>
               <FormControl>
                 <Select
