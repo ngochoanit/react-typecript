@@ -15,6 +15,8 @@ import WellcomeMessage from './WellcomeMessage';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ProgressContext } from 'src/contexts/ProgressContext';
 import { ThemeContext } from 'src/contexts/ThemeContext';
+import { AuthContext } from 'src/contexts/AuthContex';
+import Login from './Login';
 const StyledBox = styled(Box)({
   textAlign: 'center',
 });
@@ -31,8 +33,20 @@ const Navbar = () => {
   // state
   const [position, setPosition] = useState<string>('full-stack-developer');
   const [time, setTime] = useState<Date>(() => new Date(Date.now()));
+  const [isOpen, setIsopen] = useState(false);
   const { status, lastTime } = useContext(ProgressContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
+  const { authInfo, toggleAuth } = useContext(AuthContext);
+  const handleRegistration = () => {
+    if (authInfo.isAuthenticated) {
+      toggleAuth('');
+    } else {
+      setIsopen(true);
+    }
+  };
+  const handleColse = () => {
+    setIsopen(false);
+  };
   //effect
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -88,9 +102,15 @@ const Navbar = () => {
             <Box>
               <Typography variant="h6">{time.toLocaleString()}</Typography>
             </Box>
-            <Button variant="contained" color="primary" disableElevation>
-              Login
+            <Button
+              variant="contained"
+              color="primary"
+              disableElevation
+              onClick={handleRegistration}
+            >
+              {authInfo.isAuthenticated ? 'Logout' : 'Login'}
             </Button>
+            <Login isOpen={isOpen} handleColse={handleColse}></Login>
           </StyledBox>
         </Box>
       </Toolbar>
