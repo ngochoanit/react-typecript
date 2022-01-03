@@ -9,10 +9,6 @@ import {
 import React, { useContext, useState } from 'react';
 import { MovieContext } from 'src/contexts/MovieContext';
 import { ThemeContext } from 'src/contexts/ThemeContext';
-interface IMovie {
-  id: string;
-  title: string;
-}
 const useStyle = makeStyles({
   movieInput: {
     marginRight: '5px',
